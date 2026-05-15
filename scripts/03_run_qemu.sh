@@ -43,19 +43,21 @@ echo -e "  Kernel:     ${CYAN}${BZIMAGE}${NC}"
 echo ""
 
 exec qemu-system-x86_64 \
-  -nographic \
-  -no-reboot \
-  -kernel "$BZIMAGE" \
-  -initrd "$INITRAMFS" \
-  -append "console=ttyS0 quiet STUDENT_ID=${STUDENT_ID}" \
-  -m 512M \
-  -smp "$(nproc)" \
-  -enable-kvm 2>/dev/null || \
+    -nographic \
+    -no-reboot \
+    -kernel "$BZIMAGE" \
+    -initrd "$INITRAMFS" \
+    -append "console=ttyS0 quiet STUDENT_ID=${STUDENT_ID}" \
+    -m 512M \
+    -smp "$(nproc)" \
+   -enable-kvm 2>/dev/null || \
+   -netdev user,id=net0 -device virtio-net-pci,netdev=net0 \
 qemu-system-x86_64 \
-  -nographic \
-  -no-reboot \
-  -kernel "$BZIMAGE" \
-  -initrd "$INITRAMFS" \
-  -append "console=ttyS0 quiet STUDENT_ID=${STUDENT_ID}" \
-  -m 512M \
-  -smp 2
+    -nographic \
+    -no-reboot \
+    -kernel "$BZIMAGE" \
+    -initrd "$INITRAMFS" \
+    -append "console=ttyS0 quiet STUDENT_ID=${STUDENT_ID}" \
+    -m 512M \
+    -smp 2 \
+    -netdev user,id=net0 -device virtio-net-pci,netdev=net0 
