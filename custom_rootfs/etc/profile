@@ -1,0 +1,9 @@
+export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+export PS1='[\u@copy-fail \w]\$ '
+echo ""
+echo "  Bienvenido al kernel vulnerable (CVE-2026-31431)"
+echo "  Usuario: $(id)"
+echo "  Kernel:  $(uname -r)"
+echo "  Módulos cargados con algif:"
+echo "  $(cat /proc/modules | grep alg || echo '  (ninguno detectado aún)')"
+echo ""

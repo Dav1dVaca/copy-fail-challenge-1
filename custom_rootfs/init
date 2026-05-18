@@ -1,0 +1,36 @@
+#!/bin/sh
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t devtmpfs none /dev 2>/dev/null || mdev -s
+mount -t tmpfs none /tmp
+
+# Cargar módulos crypto necesarios para la vulnerabilidad
+modprobe algif_aead 2>/dev/null || true
+modprobe authencesn 2>/dev/null || true
+
+# Hostname identificador (para validación anti-copia)
+STUDENT_ID="${STUDENT_ID:-unknown}"
+hostname "copy-fail-${STUDENT_ID}"
+
+echo ""
+echo "  ╔══════════════════════════════════════════╗"
+echo "  ║   KERNEL VULNERABLE — CVE-2026-31431     ║"
+echo "  ║   $(uname -r | cut -c1-42)               ║"
+echo "  ╚══════════════════════════════════════════╝"
+echo ""
+
+# Iniciar SSH daemon si existe
+if [ -x /usr/sbin/sshd ]; then
+  /usr/sbin/sshd -D &
+fi
+
+# Login como student (sin privilegios)
+
+mkdir -p /proc /sys /dev /etc /home/student
+chmod 755 /home/student
+mount -t proc proc /proc 2>/dev/null || true
+mount -t sysfs sysfs /sys 2>/dev/null || true
+/bin/busybox ifconfig eth0 10.0.2.15 netmask 255.255.255.0 up 2>/dev/null || true
+/bin/busybox route add default gw 10.0.2.2 2>/dev/null || true
+echo "nameserver 8.8.8.8" > /etc/resolv.conf
+exec /bin/busybox su - student
