@@ -1,0 +1,9 @@
+=== HITO 1: KERNEL VULNERABLE CONFIRMADO ===
+Fecha: Mon May 18 21:33:48 UTC 2026
+Hostname: copy-fail
+Kernel: 6.12.0
+Identidad: uid=1001(student) gid=1001(student) groups=1001(student)
+Whoami: student
+Estado de /proc/modules:
+No disponible (/proc/modules no montado)
+algif_aead no verificable (/proc no montado)
